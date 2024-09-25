@@ -10,7 +10,7 @@ namespace Eden_Fn.Models.DTO
     {
         [Required(ErrorMessage = "O campo {0} é de preenchimento obrigatório.")]
         public string Username { get; set; }
-        
+
         [Required(ErrorMessage = "O campo {0} é de preenchimento obrigatório.")]
         public string Password { get; set; }
     }

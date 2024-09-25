@@ -9,15 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("Default"); 
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(
-    connectionString, ServerVersion.AutoDetect(connectionString))); 
+var connectionString = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+);
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder
+    .Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DatabaseContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/UserAuthentication/Login");
+builder.Services.ConfigureApplicationCookie(options =>
+    options.LoginPath = "/UserAuthentication/Login"
+);
 
 builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
@@ -40,6 +44,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=UserAuthentication}/{action=Login}/{id?}");
+    pattern: "{controller=UserAuthentication}/{action=Login}/{id?}"
+);
 
 app.Run();

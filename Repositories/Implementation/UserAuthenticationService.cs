@@ -2,29 +2,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Eden_Fn.Models;
 using Eden_Fn.Models.Domain;
 using Eden_Fn.Models.DTO;
 using Eden_Fn.Repositories.Abstract;
 using Microsoft.AspNetCore.Identity;
-using Eden_Fn.Models;
-using System.Text;
 
 namespace Eden_Fn.Repositories.Implementation
 {
-    public class UserAuthenticationService: IUserAuthenticationService
+    public class UserAuthenticationService : IUserAuthenticationService
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        public UserAuthenticationService(UserManager<ApplicationUser> userManager, 
-            SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+
+        public UserAuthenticationService(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager
+        )
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
-            this.signInManager = signInManager; 
-
+            this.signInManager = signInManager;
         }
+
         public async Task<Status> RegisterAsync(RegistrationModel model)
         {
             var status = new Status();
@@ -41,8 +45,8 @@ namespace Eden_Fn.Repositories.Implementation
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 FrameLink = model.FrameLink,
-                EmailConfirmed=true,
-                PhoneNumberConfirmed=true,
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -54,7 +58,6 @@ namespace Eden_Fn.Repositories.Implementation
 
             if (!await roleManager.RoleExistsAsync(model.Role))
                 await roleManager.CreateAsync(new IdentityRole(model.Role));
-            
 
             if (await roleManager.RoleExistsAsync(model.Role))
             {
@@ -66,7 +69,7 @@ namespace Eden_Fn.Repositories.Implementation
             return status;
         }
 
-         public async Task<Status> UpdateAsync(ApplicationUser model, string id)
+        public async Task<Status> UpdateAsync(ApplicationUser model, string id)
         {
             var status = new Status();
             var user = await userManager.FindByIdAsync(id);
@@ -139,14 +142,16 @@ namespace Eden_Fn.Repositories.Implementation
                 return status;
             }
 
-            var signInResult = await signInManager.PasswordSignInAsync(user, model.Password, false, true);
+            var signInResult = await signInManager.PasswordSignInAsync(
+                user,
+                model.Password,
+                false,
+                true
+            );
             if (signInResult.Succeeded)
             {
                 var userRoles = await userManager.GetRolesAsync(user);
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                };
+                var authClaims = new List<Claim> { new Claim(ClaimTypes.Name, user.UserName), };
 
                 foreach (var userRole in userRoles)
                 {
@@ -165,20 +170,19 @@ namespace Eden_Fn.Repositories.Implementation
                 status.StatusCode = 0;
                 status.Message = "Erro ao logar";
             }
-           
+
             return status;
         }
 
         public async Task LogoutAsync()
         {
-           await signInManager.SignOutAsync();
-           
+            await signInManager.SignOutAsync();
         }
 
-        public async Task<Status> ChangePasswordAsync(ChangePassword model,string username)
+        public async Task<Status> ChangePasswordAsync(ChangePassword model, string username)
         {
             var status = new Status();
-            
+
             var user = await userManager.FindByNameAsync(username);
             if (user == null)
             {
@@ -186,7 +190,11 @@ namespace Eden_Fn.Repositories.Implementation
                 status.StatusCode = 0;
                 return status;
             }
-            var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            var result = await userManager.ChangePasswordAsync(
+                user,
+                model.CurrentPassword,
+                model.NewPassword
+            );
             if (result.Succeeded)
             {
                 status.Message = "A senha foi atualizada com sucesso";
@@ -198,8 +206,6 @@ namespace Eden_Fn.Repositories.Implementation
                 status.StatusCode = 0;
             }
             return status;
-
         }
-        
     }
 }

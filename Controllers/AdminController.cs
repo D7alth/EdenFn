@@ -13,17 +13,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Eden_Fn.Controllers
 {
-    [Authorize(Roles ="admin")]
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserAuthenticationService _authService;
 
-        public AdminController(UserManager<ApplicationUser> userManager, IUserAuthenticationService authService)
+        public AdminController(
+            UserManager<ApplicationUser> userManager,
+            IUserAuthenticationService authService
+        )
         {
             _userManager = userManager;
             _authService = authService;
-
         }
 
         public IActionResult Index()
@@ -31,7 +33,8 @@ namespace Eden_Fn.Controllers
             IEnumerable<ApplicationUser> users = _userManager.Users.ToList();
             return View(users);
         }
-          public IActionResult Criar()
+
+        public IActionResult Criar()
         {
             return View();
         }
@@ -40,7 +43,10 @@ namespace Eden_Fn.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Criar(RegistrationModel model)
         {
-            if(!ModelState.IsValid) { return View(model); }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             model.Role = "user";
             var result = await _authService.RegisterAsync(model);
             TempData["msg"] = result.Message;
@@ -49,11 +55,13 @@ namespace Eden_Fn.Controllers
 
         public async Task<IActionResult> Editar(string id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+                return NotFound();
 
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user == null) return NotFound();
+            if (user == null)
+                return NotFound();
 
             return View(user);
         }
@@ -62,7 +70,10 @@ namespace Eden_Fn.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar(ApplicationUser model, string id)
         {
-            if (!ModelState.IsValid) { return View(model); }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var result = await _authService.UpdateAsync(model, id);
             TempData["msg"] = result.Message;
             return RedirectToAction(nameof(Index));
@@ -70,11 +81,13 @@ namespace Eden_Fn.Controllers
 
         public async Task<IActionResult> Deletar(string? id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+                return NotFound();
 
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user == null) return NotFound();
+            if (user == null)
+                return NotFound();
 
             var deleteOperation = await _userManager.DeleteAsync(user);
 
@@ -82,8 +95,8 @@ namespace Eden_Fn.Controllers
         }
 
         public IActionResult Dashboard()
-        {   
-            var totalUser =  _userManager.Users.Count();
+        {
+            var totalUser = _userManager.Users.Count();
             return View(totalUser);
         }
     }

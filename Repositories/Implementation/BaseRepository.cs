@@ -9,13 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eden_Fn.Repositories.Implementation
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T>
+        where T : class
     {
         private readonly DatabaseContext ctx;
+
         public BaseRepository(DatabaseContext ctx)
         {
             this.ctx = ctx;
         }
+
         public bool Create(T entity)
         {
             try
@@ -24,7 +27,7 @@ namespace Eden_Fn.Repositories.Implementation
                 ctx.SaveChanges();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -43,6 +46,7 @@ namespace Eden_Fn.Repositories.Implementation
                 return false;
             }
         }
+
         public bool Update(T entity)
         {
             try
@@ -56,9 +60,10 @@ namespace Eden_Fn.Repositories.Implementation
                 return false;
             }
         }
+
         public T? FindById(int id)
         {
-           return ctx.Set<T>().Find(id);
+            return ctx.Set<T>().Find(id);
         }
 
         public IQueryable<T> GetAll()
@@ -69,10 +74,6 @@ namespace Eden_Fn.Repositories.Implementation
         public IQueryable<T> GetAll(Expression<Func<T, bool>> expression)
         {
             return ctx.Set<T>().Where(expression).AsNoTracking();
-
         }
-
-       
     }
-
 }

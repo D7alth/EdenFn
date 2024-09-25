@@ -12,34 +12,36 @@ using Microsoft.Extensions.Logging;
 
 namespace Eden_Fn.Controllers
 {
-   [Authorize]
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly IUserAuthenticationService _authService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public DashboardController(UserManager<ApplicationUser> userManager, IUserAuthenticationService authService)
+        public DashboardController(
+            UserManager<ApplicationUser> userManager,
+            IUserAuthenticationService authService
+        )
         {
             _userManager = userManager;
             _authService = authService;
         }
+
         public IActionResult Index()
         {
             return View();
         }
-         public async Task<IActionResult> Display()
+
+        public async Task<IActionResult> Display()
         {
             var userName = User.Identity.Name;
             var user = await _userManager.FindByNameAsync(userName);
             if (user == null)
             {
                 return NotFound();
-            }       
-            var applicationUser = new ApplicationUser()
-            {
-                FrameLink = user.FrameLink
-            };     
-            
+            }
+            var applicationUser = new ApplicationUser() { FrameLink = user.FrameLink };
+
             return View(applicationUser);
         }
     }

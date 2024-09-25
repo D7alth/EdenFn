@@ -9,11 +9,10 @@ namespace Eden_Fn.Repositories.Abstract
 {
     public interface IUserAuthenticationService
     {
-   
         Task<Status> LoginAsync(LoginModel model);
         Task<Status> UpdateAsync(ApplicationUser model, string id);
         Task LogoutAsync();
         Task<Status> RegisterAsync(RegistrationModel model);
-        Task<Status> ChangePasswordAsync(ChangePassword model, string username); 
+        Task<Status> ChangePasswordAsync(ChangePassword model, string username);
     }
 }
