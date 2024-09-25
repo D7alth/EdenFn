@@ -1,0 +1,79 @@
+@model ApplicationUser
+@{
+    Layout = null;
+}
+<style>
+   html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    iframe {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    #overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.075);
+        display: block;
+        z-index: 9999;
+    }
+
+    body.locked {
+        overflow: hidden;
+    }
+</style>
+
+<div id="overlay"></div>
+
+    <iframe id="frame" src="@Model.FrameLink"></iframe>
+
+
+
+<script>
+  // esconde a div quando o usuário clica com o botão esquerdo
+    var overlay = document.getElementById("overlay");
+    overlay.addEventListener("click", function(e) {
+        if (e.button === 0) {
+            overlay.style.display = "none";
+        }
+    });
+
+    // mostra a div quando o usuário clica com o botão direito
+    var iframe = document.getElementById("frame");
+    iframe.addEventListener("contextmenu", function(e) {
+        e.preventDefault();
+        overlay.style.display = "block";
+    });
+
+    // mostra a div quando o usuário clica com o botão esquerdo no iframe, se a div estiver oculta
+    iframe.addEventListener("click", function(e) {
+        if (e.button === 0 && overlay.style.display === "none") {
+            overlay.style.display = "block";
+        }
+    });
+
+    // impede o clique direito do mouse
+    document.addEventListener("contextmenu", function(e) {
+        e.preventDefault();
+    });
+
+    // impede a abertura do console F12
+    document.addEventListener("keydown", function(e) {
+        if (e.which === 123) {
+            e.preventDefault();
+        }
+    });
+
+    // trava o body para impedir o scroll
+    document.body.classList.add("locked");
+</script>

@@ -1,0 +1,42 @@
+@model Eden_Fn.Models.DTO.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">]
+    <link rel="stylesheet" href="~/css/Theme/custom.css">
+</head>
+<body>
+<div class="background">
+  <div class="shape"></div>
+  <div class="shape"></div>
+</div>
+<form asp-action="Login" method="post">
+   <h3>Faça seu login aqui</h3>
+  
+  <div class="container">
+    <label asp-for="Username"><b>Nome de usaurio</b></label>
+    <input type="text" asp-for="Username" placeholder="Usuario">
+    <div class="msg">
+          <span class="err" asp-validation-for="Username"></span>
+    </div>
+    <label asp-for="Password"><b>Senha</b></label>
+    <input  type="password" asp-for="Password" placeholder="Senha">
+    <div class="msg">
+      <span asp-validation-for="Password" class="err"></span>
+    </div>
+
+    @if(TempData["msg"]!=null){
+                <div class="msg">@TempData["msg"]</div>
+    }
+
+    <button type="submit">Login</button>
+  </div>
+</form>
+
+</body>
+</html>

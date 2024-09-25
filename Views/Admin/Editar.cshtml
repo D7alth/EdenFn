@@ -1,0 +1,28 @@
+@model ApplicationUser
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/Theme/bootstrap.css" asp-append-version="true" />
+<div class="container">
+<div class="row">
+    <div class="col-md-6 center-block">
+        <h3>Editar de usuarios</h3>
+        <form asp-controller="Admin" asp-action="Editar" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label  for="UserName">Nome de usuário:</label>
+                <input class="form-control" type="text" asp-for="UserName" />
+            </div><br>
+            <div class="form-group">
+                <label  for="Email">E-mail:</label>
+                <input class="form-control" type="email" asp-for="Email" />
+            </div><br>
+            <div class="form-group">
+                <label  for="FrameLink">Link do Frame:</label>
+                <input class="form-control" type="text" asp-for="FrameLink" />
+            </div><br>
+            <div class="form-group">
+                <button type="submit" style="color:#000" class="btn bg-white"> Editar </button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

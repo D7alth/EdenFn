@@ -1,0 +1,61 @@
+@model Eden_Fn.Models.DTO.RegistrationModel
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/Theme/bootstrap.css" asp-append-version="true" />
+
+@Html.ValidationSummary()
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 center-block">
+            <h3>Cadastro de usuarios</h3>
+            <form asp-action="Criar" method="post">
+
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" class="form-control" asp-for="Username" />
+                    <span class="text-danger" asp-validation-for="Username"></span>
+
+                </div><br>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" asp-for="Email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
+
+                </div><br>
+
+                <div class="form-group">
+                    <label>Link do frame</label>
+                    <input type="url" class="form-control" asp-for="FrameLink" />
+                    <span class="text-danger" asp-validation-for="FrameLink"></span>
+
+                </div><br>
+
+                <div class="form-group">
+                    <label>Senha (ex. Fulano@123)</label>
+                    <input type="password" class="form-control" asp-for="Password" />
+                    <span class="text-danger" asp-validation-for="Password"></span>
+
+                </div><br>
+
+                <div class="form-group">
+                    <label>Confirme sua senha</label>
+                    <input type="password" class="form-control" asp-for="PasswordConfirm" />
+                    <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
+
+                </div><br><br>
+
+               
+                
+                @if (TempData["msg"] != null)
+                {
+                    <div class="form-group">
+                       <span class="text-info">@TempData["msg"]</span>
+                    </div>
+                }
+
+                <button type="submit" style="color:#000" class="btn bg-white">Cadastrar</button>
+
+            </form>
+        </div>
+    </div>
+</div>
